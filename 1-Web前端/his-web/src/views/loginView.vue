@@ -131,6 +131,7 @@
 </style>
 
 <script>
+import axios from 'axios'
 import { ElNotification } from 'element-plus'
 
 export default {
@@ -159,19 +160,25 @@ export default {
         () => {
           this.axios.get(this.tokenInforAPI, {
             params: {
-              userNum: this.userNum,
-              passWord: this.passWord
+              userNum: this.accountForm.userNum,
+              passWord: this.accountForm.passWord
             }
           }).then((result) => {
+            ElNotification({
+              duration: 1500,
+              title: '成功',
+              message: '登录成功',
+              position: 'bottom-right',
+              type: 'success'
+            })
             localStorage.setItem('token', result.data.token)
             this.$router.push({ name: 'home' })
           }).catch((result) => {
             if (result.response) {
               ElNotification({
-                dangerouslyUseHTMLString: true,
                 duration: 1500,
                 title: '错误',
-                message: result.response.data,
+                message: result.response.data.error,
                 position: 'bottom-right',
                 type: 'error'
               })
@@ -190,6 +197,36 @@ export default {
     },
     onRegister () {
       this.$router.push({ name: 'signUp' })
+    }
+  },
+  beforeRouteEnter (to, from, next) {
+    if (localStorage.getItem('token') !== null) {
+      axios.get('/login', {
+        params: {
+          token: localStorage.getItem('token')
+        }
+      })
+        .then(() => {
+          ElNotification({
+            title: '已经登录',
+            message: '已经登录',
+            position: 'bottom-right',
+            type: 'success'
+          })
+          next((VueSelf) => { VueSelf.$router.push({ name: 'home' }) })
+        })
+        .catch(() => {
+          ElNotification({
+            title: '登录信息过期或错误：请重新登录',
+            message: 'login visit error',
+            position: 'bottom-right',
+            type: 'error'
+          })
+          localStorage.removeItem('token')
+          next()
+        })
+    } else {
+      next()
     }
   }
 }
