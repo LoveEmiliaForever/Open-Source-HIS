@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.1.0",
+    "@infectoone/vue-ganttastic": "^2.2.0",
     "axios": "^1.6.2",
     "echarts": "^5.4.3",
     "element-plus": "^2.4.2",
@@ -36,13 +37,12 @@
       "node": true
     },
     "extends": [
-      "plugin:vue/vue3-essential",
+      "plugin:vue/essential",
       "@vue/standard"
     ],
     "parserOptions": {
       "ecmaVersion": 2020
-    },
-    "rules": {}
+    }
   },
   "browserslist": [
     "> 1%",
