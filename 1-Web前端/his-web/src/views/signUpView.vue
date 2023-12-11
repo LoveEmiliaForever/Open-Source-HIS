@@ -114,6 +114,7 @@
 </style>
 
 <script>
+import axios from 'axios'
 import { ElNotification } from 'element-plus'
 export default {
   name: 'signUpView',
@@ -152,11 +153,11 @@ export default {
       this.$refs.signUpForm.validate()
         .then(() => {
           this.axios.post(this.signUpInforAPI, {
-            patientName: this.name,
-            patientGender: this.gender,
-            patientIdNum: this.idNum,
-            patientBirth: this.birth,
-            patientPhoneNum: this.phoneNum
+            patientName: this.signUpForm.name,
+            patientGender: this.signUpForm.gender,
+            patientIdNum: this.signUpForm.idNum,
+            patientBirth: this.signUpForm.birth,
+            patientPhoneNum: this.signUpForm.phoneNum
           })
             .then(() => {
               ElNotification({
@@ -171,10 +172,9 @@ export default {
             .catch((result) => {
               if (result.response) {
                 ElNotification({
-                  dangerouslyUseHTMLString: true,
                   duration: 1500,
                   title: '错误',
-                  message: result.response.data,
+                  message: result.response.data.error,
                   position: 'bottom-right',
                   type: 'error'
                 })
@@ -193,6 +193,36 @@ export default {
     },
     onCancel () {
       this.$router.push({ name: 'login' })
+    }
+  },
+  beforeRouteEnter (to, from, next) {
+    if (localStorage.getItem('token') !== null) {
+      axios.get('/login', {
+        params: {
+          token: localStorage.getItem('token')
+        }
+      })
+        .then(() => {
+          ElNotification({
+            title: '已经登录',
+            message: '已经登录',
+            position: 'bottom-right',
+            type: 'success'
+          })
+          next((VueSelf) => { VueSelf.$router.push({ name: 'home' }) })
+        })
+        .catch(() => {
+          ElNotification({
+            title: '登录信息过期或错误：请重新登录',
+            message: 'sign-up visit error',
+            position: 'bottom-right',
+            type: 'error'
+          })
+          localStorage.removeItem('token')
+          next((VueSelf) => { VueSelf.$router.push({ name: 'login' }) })
+        })
+    } else {
+      next()
     }
   }
 }
