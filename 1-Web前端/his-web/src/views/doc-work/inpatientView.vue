@@ -1,9 +1,13 @@
 <template>
   <div id="docWorkInpatient">
+    <el-button @click="refresh">刷新数据</el-button>
+    <div v-if="!this.recordId">
+      <p style="color: red;font-weight: 700;font-size: 1.2rem;">还没有创建并提交病历，先行创建并提交病历后开放此页面</p>
+    </div>
     <div v-if="inpatientFlag">
       <p style="color: red;font-weight: 700;font-size: 1.2rem;">病人正在住院中，住院信息如下：</p>
     </div>
-    <div v-if="inpatientFlag">
+    <div v-if="inpatientFlag && this.recordId">
       <table v-if="inpatientInfor" border class="record-table table">
         <tr class="table-header">
           <td>病人名字</td>
@@ -41,7 +45,7 @@
         </tr>
       </table>
     </div>
-    <div v-if="!inpatientFlag" id="docWorkInpatientForm">
+    <div v-if="!inpatientFlag && this.recordId" id="docWorkInpatientForm">
       <el-form :model="form" ref="form" :rules="rules">
         <el-form-item label="入院理由" prop="inpatientReason">
           <el-input type="textarea" v-model="form.inpatientReason" placeholder="输入病人入院理由"></el-input>
@@ -127,6 +131,9 @@ export default {
   },
   methods: {
     ...mapMutations('docWork', ['setPatientId', 'setRecordId']),
+    async refresh () {
+      this.getInpatientFlag()
+    },
     async getInpatientFlag () {
       await axios.get(this.inpatientFlagAPI, {
         params: {

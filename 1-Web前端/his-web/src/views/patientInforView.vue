@@ -113,6 +113,7 @@ export default {
               type: 'success',
               message: '更改成功'
             })
+            this.getBasicInfor()
             this.dialogFlag = false
             this.$refs.form.resetFields()
           }).catch((result) => { this.$store.state.errorReport(result) })

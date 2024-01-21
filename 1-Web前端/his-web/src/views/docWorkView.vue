@@ -35,6 +35,12 @@
       <el-tab-pane label="出院管理（住院部）" v-if="childrenPermissions.docWorkInpatientOut">
         <inpatientOutView></inpatientOutView>
       </el-tab-pane>
+      <el-tab-pane label="往期看诊病历查看" v-if="childrenPermissions.docWorkPatientInfor">
+        <historyRecordView></historyRecordView>
+      </el-tab-pane>
+      <el-tab-pane label="挂号区查看" v-if="childrenPermissions.docWorkPatientInfor">
+        <registerInforView></registerInforView>
+      </el-tab-pane>
     </el-tabs>
   </BasicFrame>
 </template>
@@ -55,6 +61,8 @@ import patientInforView from './doc-work/patientInforView.vue'
 import recordView from './doc-work/recordView.vue'
 // import registerView from './doc-work/registerView.vue'
 import prescriptionView from './doc-work/prescriptionView.vue'
+import historyRecordView from './doc-work/historyRecordView.vue'
+import registerInforView from './doc-work/registerInforView.vue'
 import { mapState } from 'vuex'
 
 export default {
@@ -71,7 +79,9 @@ export default {
     patientInforView,
     recordView,
     // registerView,
-    prescriptionView
+    prescriptionView,
+    historyRecordView,
+    registerInforView
   },
   computed: mapState(['childrenPermissions'])
 }

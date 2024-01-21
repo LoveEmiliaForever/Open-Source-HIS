@@ -22,7 +22,7 @@ const docWork = {
   namespaced: true,
   state: {
     patientId2: '',
-    recordId2: true
+    recordId2: false
   },
   mutations: {
     setPatientId (state, payObj) {

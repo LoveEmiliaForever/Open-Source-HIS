@@ -1,6 +1,27 @@
 <template>
-  <BasicFrame>
-    <div id="patientRecord" class="contents">
+  <div id="temp">
+    <div id="docWorkPatientInfor2">
+      <table border class="table">
+        <tr class="table-header">
+          <td>病人姓名</td>
+          <td>病人性别</td>
+          <td>病人生日</td>
+        </tr>
+        <tr>
+          <td>{{ patientBasicInfor.name  }}</td>
+          <td>{{ patientBasicInfor.gender  }}</td>
+          <td>{{ patientBasicInfor.birth  }}</td>
+        </tr>
+        <tr class="table-header">
+          <td>病人身份证号</td>
+          <td>病人联系电话</td>
+          <td rowspan="2"><el-button type="success" @click="callPatient">当前看诊完毕：叫号下一位病人</el-button></td>
+        </tr>
+        <tr>
+          <td>{{ patientBasicInfor.idNum  }}</td>
+          <td>{{ patientBasicInfor.phoneNum  }}</td>
+        </tr>
+      </table>
       <el-tabs>
         <el-tab-pane label="病历信息">
           <el-table :data="recordInfor" border>
@@ -214,69 +235,167 @@
         </el-tab-pane>
       </el-tabs>
     </div>
-  </BasicFrame>
+    <div id="temp2">
+      <el-button @click="getRegister">刷新数据</el-button>
+      <el-table :data="register" border>
+        <el-table-column label="患者名字" prop="patientName"></el-table-column>
+        <el-table-column label="挂号医生" prop="doctorName"></el-table-column>
+        <el-table-column label="挂号开始时间" prop="startTime"></el-table-column>
+        <el-table-column label="挂号结束时间" prop="endTime"></el-table-column>
+        <el-table-column align="right">
+          <template #default="scope">
+            <el-button type="success" @click="callPatient2(scope.row.patientId)">现在立即看诊</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
+  </div>
 </template>
 
 <style>
-#patientRecord{
-  padding: 2rem;
+#temp{
+  display: flex;
+  width: 100%;
 }
-#patientRecord .table{
+#temp2{
+  width: 50%;
+}
+#docWorkPatientInfor2{
+  width: 50%;
+}
+#docWorkPatientInfor2 .table{
   border-collapse: collapse;
   text-align: center;
   width: 100%;
 }
-#patientRecord .record-table{
+#docWorkPatientInfor2 .record-table{
   border-collapse: collapse;
   text-align: center;
   margin: 2rem 10%;
   width: 80%;
 }
-#patientRecord .table-header{
+#docWorkPatientInfor2 .table-header{
   font-weight: 700;
 }
-#patientRecord .table td{
+#docWorkPatientInfor2 .table td{
   padding: 0.5rem;
 }
-#patientRecord .table-big-td td{
+#docWorkPatientInfor2 .table-big-td td{
   padding: 3rem 0.5rem;
 }
-#patientRecord .table-complex td{
+#docWorkPatientInfor2 .table-complex td{
   padding: 0.5rem 0.5rem;
 }
-#patientRecord .check-image{
+#docWorkPatientInfor2 .check-image{
   width: 50%;
   margin: 0 25%;
 }
-#patientRecord .check-image img{
+#docWorkPatientInfor2 .check-image img{
   width: 100%;
 }
 </style>
 
 <script>
+import { mapMutations, mapState } from 'vuex'
 import axios from 'axios'
-import BasicFrame from '@/components/basicFrame.vue'
-import { mapState } from 'vuex'
+import { ElMessage } from 'element-plus'
+// .catch((result) => { this.$store.state.errorReport(result) })
 
 export default {
-  name: 'userView',
-  components: {
-    BasicFrame
-  },
+  name: 'patientInforView',
   data () {
     return {
+      patientBasicInfor: {
+        name: '',
+        gender: '',
+        idNum: '',
+        birth: '',
+        phoneNum: ''
+      },
       recordInfor: false,
       inpatientInfor: false,
-      patientRecordInforAPI: '/patient/medical-record/patientRecordInfor',
-      inpatientInforAPI: '/patient/medical-record/inpatientInfor'
+      register: false,
+      registerInforAPI: '/doc-work/patient-infor/registerInfor',
+      patientBasicInforAPI: '/doc-work/patient-infor/patientBasicInfor',
+      patientRecordInforAPI: '/doc-work/patient-infor/patientRecordInfor',
+      inpatientInforAPI: '/doc-work/patient-infor/inpatientInfor',
+      registerAPI: '/doc-work/patient-infor/register'
     }
   },
-  computed: mapState(['childrenPermissions']),
+  computed: {
+    ...mapState('docWork', ['patientId2', 'recordId2']),
+    patientId: {
+      get () {
+        return this.patientId2
+      },
+      set (newValue) {
+        this.setPatientId(newValue)
+      }
+    },
+    recordId: {
+      get () {
+        return this.recordId2
+      },
+      set (newValue) {
+        this.setRecordId(newValue)
+      }
+    }
+  },
   methods: {
+    ...mapMutations('docWork', ['setPatientId', 'setRecordId']),
+    async callPatient () {
+      axios.get(this.registerInforAPI, {
+        params: {
+          token: localStorage.getItem('token'),
+          patientId: this.patientId
+        }
+      }).then(async (result) => {
+        ElMessage({
+          type: 'success',
+          message: '已叫号下一个病人'
+        })
+        this.patientId = result.data.patientId
+        this.recordId = false
+        await this.getBasicInfor()
+        await this.getRecordInfor()
+        await this.getInpatientInfor()
+      }).catch((result) => { this.$store.state.errorReport(result) })
+    },
+    async callPatient2 (patientId) {
+      this.patientId = patientId
+      this.recordId = false
+      await this.getBasicInfor()
+      await this.getRecordInfor()
+      await this.getInpatientInfor()
+    },
+    async getRegister () {
+      await axios.get(this.registerAPI, {
+        params: {
+          token: localStorage.getItem('token')
+        }
+      }).then((result) => {
+        this.register = result.data
+      }).catch((result) => { this.$store.state.errorReport(result) })
+    },
+    async getBasicInfor () {
+      await axios.get(this.patientBasicInforAPI, {
+        params: {
+          token: localStorage.getItem('token'),
+          patientId: this.patientId
+        }
+      }).then((result) => {
+        this.patientBasicInfor.name = result.data.name
+        this.patientBasicInfor.gender = result.data.gender
+        this.patientBasicInfor.idNum = result.data.idNum
+        this.patientBasicInfor.birth = result.data.birth
+        this.patientBasicInfor.phoneNum = result.data.phoneNum
+      }).catch((result) => { this.$store.state.errorReport(result) })
+    },
     async getRecordInfor () {
       await axios.get(this.patientRecordInforAPI, {
         params: {
-          token: localStorage.getItem('token')
+          token: localStorage.getItem('token'),
+          patientId: this.patientId
         }
       }).then((result) => {
         this.recordInfor = result.data
@@ -285,7 +404,8 @@ export default {
     async getInpatientInfor () {
       await axios.get(this.inpatientInforAPI, {
         params: {
-          token: localStorage.getItem('token')
+          token: localStorage.getItem('token'),
+          patientId: this.patientId
         }
       }).then((result) => {
         this.inpatientInfor = result.data
@@ -293,6 +413,7 @@ export default {
     }
   },
   async beforeMount () {
+    await this.getBasicInfor()
     await this.getRecordInfor()
     await this.getInpatientInfor()
   }

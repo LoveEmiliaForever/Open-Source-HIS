@@ -38,7 +38,7 @@
           <p>要挂号的医生：{{ selectedDoctorName }}</p>
           <el-form :model="form" ref="form" :rules="rules">
             <el-form-item label="挂号的日期" prop="date">
-              <el-date-picker v-model="form.date" type="date" placeholder="选择挂号日期" :disabled-date="disabledDate"></el-date-picker>
+              <el-date-picker value-format="YYYY-MM-DD" v-model="form.date" type="date" placeholder="选择挂号日期" :disabled-date="disabledDate"></el-date-picker>
             </el-form-item>
             <el-form-item label="挂号开始时间" prop="startTime">
               <el-time-select
@@ -168,7 +168,7 @@ export default {
       await axios.get(this.registerInforAPI, {
         params: {
           token: localStorage.getItem('token'),
-          doctorId: doctorId
+          doctorId: this.selectedDoctorId
         }
       }).then((result) => {
         this.registerInfor = result.data
@@ -221,7 +221,7 @@ export default {
             registerDate: this.form.date,
             registerStartTime: this.form.startTime,
             registerEndTime: this.form.endTime,
-            doctorId: this.doctorId
+            doctorId: this.selectedDoctorId
           }).then(() => {
             ElMessage({
               type: 'success',

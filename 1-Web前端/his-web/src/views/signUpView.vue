@@ -22,11 +22,14 @@
           <el-input v-model="signUpForm.idNum" placeholder="输入身份证号码" type="text"></el-input>
         </el-form-item>
         <el-form-item label="生日日期" size="normal" prop="birth">
-          <el-date-picker v-model="signUpForm.birth" type="date" placeholder="选择您的生日日期">
+          <el-date-picker v-model="signUpForm.birth" type="date" placeholder="选择您的生日日期" value-format="YYYY-MM-DD">
           </el-date-picker>
         </el-form-item>
         <el-form-item label="联系电话" prop="phoneNum">
           <el-input v-model="signUpForm.phoneNum" placeholder="输入联系电话"></el-input>
+        </el-form-item>
+        <el-form-item label="密码设置" prop="passWord">
+          <el-input v-model="signUpForm.passWord" placeholder="设置账户的密码"></el-input>
         </el-form-item>
         <el-form-item class="signUp-form-button">
           <el-button type="primary" @click="onSignUp">注册患者账号</el-button>
@@ -43,7 +46,7 @@
 #signUp-main{
   width: 100vw;
   height: 100vh;
-  background-image: url(../assets/images/注册页面背景.webp);
+  background-image: url(../../public/images/注册页面背景.webp);
   background-size: cover;
   display: flex;
   justify-content: center;
@@ -125,7 +128,8 @@ export default {
         gender: '',
         idNum: '',
         birth: '',
-        phoneNum: ''
+        phoneNum: '',
+        passWord: ''
       },
       rules: {
         name: [
@@ -143,6 +147,9 @@ export default {
         ],
         phoneNum: [
           { required: true, message: '请输入联系电话', trigger: 'blur' }
+        ],
+        passWord: [
+          { required: true, message: '请输入联系电话', trigger: 'blur' }
         ]
       },
       signUpInforAPI: '/sign-up/register'
@@ -157,7 +164,8 @@ export default {
             patientGender: this.signUpForm.gender,
             patientIdNum: this.signUpForm.idNum,
             patientBirth: this.signUpForm.birth,
-            patientPhoneNum: this.signUpForm.phoneNum
+            patientPhoneNum: this.signUpForm.phoneNum,
+            patientPassWord: this.signUpForm.passWord
           })
             .then(() => {
               ElNotification({

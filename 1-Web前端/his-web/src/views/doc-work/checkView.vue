@@ -8,7 +8,7 @@
         <el-table-column type="expand">
           <template #default>
             <div class="check-image">
-              <img src="../../assets/images/医学检查图片.webp">
+              <img src="/static/images/医学检查图片.webp">
             </div>
           </template>
         </el-table-column>

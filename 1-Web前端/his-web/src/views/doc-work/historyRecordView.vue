@@ -1,6 +1,6 @@
 <template>
-  <BasicFrame>
     <div id="patientRecord" class="contents">
+      <el-button @click="refresh">刷新数据</el-button>
       <el-tabs>
         <el-tab-pane label="病历信息">
           <el-table :data="recordInfor" border>
@@ -165,56 +165,8 @@
             <el-table-column label="看病医生" prop="treatingDoctor"></el-table-column>
           </el-table>
         </el-tab-pane>
-        <el-tab-pane label="住院信息">
-          <el-table :data="inpatientInfor" border>
-            <el-table-column type="expand">
-              <template #default="inpatientProps">
-                <table border class="record-table table">
-                  <tr class="table-header">
-                    <td>病人名字</td>
-                    <td>治疗医生</td>
-                    <td>入院时间</td>
-                    <td>出院时间</td>
-                  </tr>
-                  <tr>
-                    <td>{{ inpatientProps.row.patientName }}</td>
-                    <td>{{ inpatientProps.row.treatingDoctor }}</td>
-                    <td>{{ inpatientProps.row.startDate }}</td>
-                    <td>{{ inpatientProps.row.endDate }}</td>
-                  </tr>
-                  <tr class="table-header">
-                    <td>楼层号</td>
-                    <td>房间号</td>
-                    <td colspan="2">床位号</td>
-                  </tr>
-                  <tr>
-                    <td>{{ inpatientProps.row.floor }}</td>
-                    <td>{{ inpatientProps.row.room }}</td>
-                    <td colspan="2">{{ inpatientProps.row.bed }}</td>
-                  </tr>
-                  <tr class="table-header">
-                    <td colspan="4">入院理由</td>
-                  </tr>
-                  <tr class="table-big-td">
-                    <td colspan="4">{{ inpatientProps.row.inpatientReason }}</td>
-                  </tr>
-                  <tr class="table-header">
-                    <td colspan="4">出院理由</td>
-                  </tr>
-                  <tr class="table-big-td">
-                    <td colspan="4">{{ inpatientProps.row.inpatientOutReason }}</td>
-                  </tr>
-                </table>
-              </template>
-            </el-table-column>
-            <el-table-column label="病人名字" prop="patientName"></el-table-column>
-            <el-table-column label="入院时间" prop="startDate"></el-table-column>
-            <el-table-column label="看病医生" prop="treatingDoctor"></el-table-column>
-          </el-table>
-        </el-tab-pane>
       </el-tabs>
     </div>
-  </BasicFrame>
 </template>
 
 <style>
@@ -255,20 +207,14 @@
 
 <script>
 import axios from 'axios'
-import BasicFrame from '@/components/basicFrame.vue'
 import { mapState } from 'vuex'
 
 export default {
   name: 'userView',
-  components: {
-    BasicFrame
-  },
   data () {
     return {
       recordInfor: false,
-      inpatientInfor: false,
-      patientRecordInforAPI: '/patient/medical-record/patientRecordInfor',
-      inpatientInforAPI: '/patient/medical-record/inpatientInfor'
+      patientRecordInforAPI: '/doc-work/medical-record/patientRecordInfor'
     }
   },
   computed: mapState(['childrenPermissions']),
@@ -282,19 +228,9 @@ export default {
         this.recordInfor = result.data
       }).catch((result) => { this.$store.state.errorReport(result) })
     },
-    async getInpatientInfor () {
-      await axios.get(this.inpatientInforAPI, {
-        params: {
-          token: localStorage.getItem('token')
-        }
-      }).then((result) => {
-        this.inpatientInfor = result.data
-      }).catch((result) => { this.$store.state.errorReport(result) })
+    async refresh () {
+      await this.getRecordInfor()
     }
-  },
-  async beforeMount () {
-    await this.getRecordInfor()
-    await this.getInpatientInfor()
   }
 }
 </script>

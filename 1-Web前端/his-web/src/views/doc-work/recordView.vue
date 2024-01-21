@@ -24,7 +24,7 @@
           <td><el-form-item prop="tall"><el-input v-model="recordInforForm.tall" placeholder="输入身高"></el-input></el-form-item></td>
           <td><el-form-item prop="temperature"><el-input v-model="recordInforForm.temperature" placeholder="输入体温"></el-input></el-form-item></td>
           <td><el-form-item prop="systolicBloodPressure"><el-input v-model="recordInforForm.systolicBloodPressure" placeholder="输入收缩压"></el-input></el-form-item></td>
-          <td rowspan="3"><el-form-item prop="onsetTime"><el-input v-model="recordInforForm.onsetTime" placeholder="输入发病时间"></el-input></el-form-item></td>
+          <td rowspan="3"><el-form-item prop="onsetTime"><el-date-picker value-format="YYYY-MM-DD HH:mm:ss" format="YYYY-MM-DD HH:mm:ss" v-model="recordInforForm.onsetTime" type="datetime" placeholder="选择发病时间"></el-date-picker></el-form-item></td>
         </tr>
         <tr class="table-header">
           <td>体重/kg</td>

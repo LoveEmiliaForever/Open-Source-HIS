@@ -27,7 +27,7 @@
 
 <style>
 #login-main{
-  background-image: url("../assets/images/登录页面背景.webp");
+  background-image: url(../../public/images/登录页面背景.webp);
   background-size: cover;
   width: 100vw;
   height: 100vh;

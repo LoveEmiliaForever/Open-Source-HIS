@@ -15,7 +15,7 @@
       </template>
       <template #extra>
         <div id="author-address">
-          <img src="../assets/images/github.webp" alt="GitHub">
+          <img src="/static/images/github.webp" alt="GitHub">
           <div>
             <p>作者：<a href="https://github.com/LoveEmiliaForever" target="_blank">LoveEmiliaForever</a></p>
             <p>项目仓库：<a href="www.baidu.com" target="_blank">www.baidu.com</a></p>
@@ -61,6 +61,12 @@
           <el-icon v-else-if="item[0] == '查看开支'"><Reading /></el-icon>
           <el-icon v-else-if="item[0] == '个人信息'"><User /></el-icon>
           <el-icon v-else-if="item[0] == '数据可视化'"><Histogram /></el-icon>
+          <!--作业要求-->
+          <el-icon v-else-if="item[0] == '科室管理'"><Menu /></el-icon>
+          <el-icon v-else-if="item[0] == '医生管理'"><Menu /></el-icon>
+          <el-icon v-else-if="item[0] == '药品管理'"><Menu /></el-icon>
+          <el-icon v-else-if="item[0] == '患者管理'"><Menu /></el-icon>
+          <!--作业要求-->
           <el-icon v-else><House /></el-icon>
           <template #title>{{ item[0] }}</template>
         </el-menu-item>
@@ -93,7 +99,7 @@
   align-items: center;
 }
 #userProfilePhoto{
-  background-image: url(../assets/images/用户头像图片.webp);
+  background-image: url(../../public/images/用户头像图片.webp);
   background-size: cover;
   width: 5vw;
   height: 5vw;
@@ -211,6 +217,9 @@ export default {
         position: 'bottom-right',
         type: 'success'
       })
+      this.$store.state.permissions = ''
+      this.$store.state.userName = ''
+      this.$store.state.userRole = ''
       this.$router.push({ name: 'login' })
     }
   },

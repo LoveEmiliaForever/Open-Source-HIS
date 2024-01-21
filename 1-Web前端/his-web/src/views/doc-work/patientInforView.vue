@@ -124,7 +124,7 @@
                       <el-table-column type="expand">
                         <template #default>
                           <div class="check-image">
-                            <img src="../../assets/images/医学检查图片.webp">
+                            <img src="/static/images/医学检查图片.webp">
                           </div>
                         </template>
                       </el-table-column>
@@ -315,21 +315,22 @@ export default {
   },
   methods: {
     ...mapMutations('docWork', ['setPatientId', 'setRecordId']),
-    callPatient () {
+    async callPatient () {
       axios.get(this.registerInforAPI, {
         params: {
-          token: localStorage.getItem('token')
+          token: localStorage.getItem('token'),
+          patientId: this.patientId
         }
-      }).then((result) => {
+      }).then(async (result) => {
         ElMessage({
           type: 'success',
           message: '已叫号下一个病人'
         })
         this.patientId = result.data.patientId
         this.recordId = false
-        this.getBasicInfor()
-        this.getRecordInfor()
-        this.getInpatientInfor()
+        await this.getBasicInfor()
+        await this.getRecordInfor()
+        await this.getInpatientInfor()
       }).catch((result) => { this.$store.state.errorReport(result) })
     },
     async getBasicInfor () {

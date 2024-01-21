@@ -3,7 +3,7 @@
     <div>
       <el-button type="primary" @click="wareDialog = true">药品入库</el-button>
       <el-button type="warning" @click="exWareDialog = true">药品出库</el-button>
-      <el-button type="danger" @click="lossesDialog = true">药品报损</el-button>
+      <!--<el-button type="danger" @click="lossesDialog = true">药品报损</el-button>-->
     </div>
     <el-table v-if="drugInfor" :data="drugInfor" border>
       <el-table-column prop="drugName" label="药品名称"></el-table-column>
@@ -14,7 +14,8 @@
       <el-table-column prop="manufactureDate" label="生产日期"></el-table-column>
       <el-table-column prop="expirationDate" label="过期日期"></el-table-column>
       <el-table-column prop="warehousingDate" label="入库日期"></el-table-column>
-      <el-table-column prop="ExWarehousingDate" label="出库日期"></el-table-column>
+      <el-table-column prop="exWarehousingDate" label="出库日期"></el-table-column>
+      <el-table-column prop="storageWay" label="保存方式"></el-table-column>
       <el-table-column prop="drugPrice" label="药品价格"></el-table-column>
     </el-table>
     <el-dialog title="药品入库" @close="wareDialog = false; this.$refs.warehousingForm.resetFields()" v-model="wareDialog">
@@ -46,10 +47,10 @@
           </el-select>
         </el-form-item>
         <el-form-item label="生产日期" prop="manufactureDate">
-          <el-date-picker v-model="warehousingForm.manufactureDate" type="date" placeholder="选择生产日期"></el-date-picker>
+          <el-date-picker value-format="YYYY-MM-DD" v-model="warehousingForm.manufactureDate" type="date" placeholder="选择生产日期"></el-date-picker>
         </el-form-item>
         <el-form-item label="过期日期" prop="expirationDate">
-          <el-date-picker v-model="warehousingForm.expirationDate" type="date" placeholder="选择过期日期"></el-date-picker>
+          <el-date-picker value-format="YYYY-MM-DD" v-model="warehousingForm.expirationDate" type="date" placeholder="选择过期日期"></el-date-picker>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="warehousing">立即入库</el-button>

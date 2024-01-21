@@ -12,7 +12,7 @@
     <div id="vocationApplySubmit">
       <el-form :model="vocationApplyForm" ref="vocationApplyForm" :rules="rules" label-position="top">
         <el-form-item label="请假时间段：" prop="vocationRange">
-          <el-date-picker v-model="vocationApplyForm.vocationRange" type="datetimerange" start-placeholder="请假开始时间" end-placeholder="请假结束时间" range-separator="到" value-format="YYYY-MM-DD HH:mm:ss">
+          <el-date-picker v-model="vocationApplyForm.vocationRange" type="datetimerange" start-placeholder="请假开始时间" end-placeholder="请假结束时间" range-separator="到" value-format="YYYY-MM-DD hh:mm:ss">
           </el-date-picker>
         </el-form-item>
         <el-form-item label="请假理由：" prop="applicantReason">

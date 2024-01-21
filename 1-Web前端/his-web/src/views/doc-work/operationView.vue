@@ -28,7 +28,7 @@
       <el-dialog v-model="checkDialog" title="添加新手术" @close="this.$refs.participantForm.resetFields(); this.$refs.operationForm.resetFields(); participant = []">
         <el-form :model="operationForm" ref="operationForm" :rules="operationFormRules">
           <el-form-item prop="operationDateRange" label="手术时间">
-            <el-date-picker v-model="operationForm.operationDateRange" type="datetimerange" start-placeholder="手术开始时间" end-placeholder="手术结束时间" range-separator="到" value-format="YYYY-MM-DD HH:mm:ss">
+            <el-date-picker v-model="operationForm.operationDateRange" type="datetimerange" start-placeholder="手术开始时间" end-placeholder="手术结束时间" range-separator="到" value-format="YYYY-MM-DD hh:mm:ss">
           </el-date-picker>
           </el-form-item>
           <el-form-item prop="operationSummary" label="手术简介">

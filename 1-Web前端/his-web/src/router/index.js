@@ -24,6 +24,11 @@ import patientInforView from '../views/patientInforView.vue'
 import drugWarehouseWorkView from '../views/drugWarehouseWorkView.vue'
 import drugRoomWorkView from '../views/drugRoomWorkView.vue'
 
+import keShi from '../views/admin/keShi.vue'
+import yiSheng from '../views/admin/yiSheng.vue'
+import yaoPin from '../views/admin/yaoPin.vue'
+import huanZhe from '../views/admin/huanZhe.vue'
+
 const routes = [
   {
     path: '/',
@@ -129,7 +134,29 @@ const routes = [
     path: '/patient/single-information',
     name: 'patientInfor',
     component: patientInforView
+  },
+  // 作业要求
+  {
+    path: '/keShi',
+    name: 'keShi',
+    component: keShi
+  },
+  {
+    path: '/yiSheng',
+    name: 'yiSheng',
+    component: yiSheng
+  },
+  {
+    path: '/yaoPin',
+    name: 'yaoPin',
+    component: yaoPin
+  },
+  {
+    path: '/huanZhe',
+    name: 'huanZhe',
+    component: huanZhe
   }
+  // 作业要求
 ]
 
 const router = createRouter({
@@ -152,7 +179,6 @@ router.beforeEach((to, from, next) => {
     if (localStorage.getItem('token') !== null) {
       axios.get('/login', {
         params: {
-          targetURL: to,
           token: localStorage.getItem('token')
         }
       }).then((result) => {

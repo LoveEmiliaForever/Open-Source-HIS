@@ -152,7 +152,8 @@ export default {
         return
       }
       axios.post(this.addPrescriptionInforAPI, {
-        prescriptionData: this.newPrescriptionData
+        prescriptionData: this.newPrescriptionData,
+        recordId: this.recordId
       }).then(() => {
         ElMessage({
           type: 'success',

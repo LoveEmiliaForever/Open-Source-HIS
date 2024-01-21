@@ -21,7 +21,7 @@
             <el-input v-model="createForm.idNum" placeholder="输入患者身份证号码" type="text"></el-input>
           </el-form-item>
           <el-form-item label="生日日期" prop="birth">
-            <el-date-picker v-model="createForm.birth" type="date" placeholder="选择患者生日日期">
+            <el-date-picker value-format="YYYY-MM-DD" v-model="createForm.birth" type="date" placeholder="选择患者生日日期">
             </el-date-picker>
           </el-form-item>
           <el-form-item label="联系电话" prop="phoneNum">
@@ -64,7 +64,7 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item label="生日日期" prop="birth">
-            <el-date-picker v-model="reviseForm.birth" type="date" placeholder="选择患者生日日期">
+            <el-date-picker value-format="YYYY-MM-DD" v-model="reviseForm.birth" type="date" placeholder="选择患者生日日期">
             </el-date-picker>
           </el-form-item>
           <el-form-item label="联系电话" prop="phoneNum">
